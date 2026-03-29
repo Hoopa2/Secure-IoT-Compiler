@@ -1,0 +1,207 @@
+{
+  "project_title": "End-to-End Secure IoT Firmware Compiler",
+  "submitted_by": "B. Amardeep (24CSB0B13)",
+  "submitted_to": "Prof. Preeti Soni",
+  "generated_at": "2026-03-29T22:47:37.153314",
+  "overview": {
+    "objective": "Design and implement a firmware compiler for heterogeneous IoT (C/C++) that enforces end-to-end security \u2014 device identity, secure communication, and data privacy \u2014 while remaining resource-aware.",
+    "scope": "C/C++ subset for IoT firmware, software-only, no hardware dependencies.",
+    "novelty": [
+      "Compile-time security enforcement integrated into every compiler phase",
+      "Security Policy Engine with configurable rules (TLS, auth, crypto strength)",
+      "Taint-tracking data-flow analysis for secret leak detection",
+      "Energy-aware transformations (crypto selection by power profile)",
+      "Protocol-aware rules for MQTT, CoAP, HTTP/HTTPS"
+    ]
+  },
+  "architecture": {
+    "phases": [
+      "1. Lexical Analysis + Secret Detection (Lexer)",
+      "2. Parsing & AST Generation (Parser)",
+      "3. Symbol Table Construction (security attributes, taint marks)",
+      "4. Semantic Analysis (insecure functions, weak crypto, protocol checks)",
+      "5. Data-Flow / Taint Analysis (secret propagation, leak detection)",
+      "6. Policy Enforcement Engine (TLS required, auth mandatory, strong crypto)",
+      "7. Energy-Aware Transformations (crypto selection, logging level, protocol upgrade)",
+      "8. Encrypted Output Generation (Fernet encryption of firmware)"
+    ]
+  },
+  "security_features": {
+    "secret_detection_patterns": [
+      "API keys (sk_live_, AKIA... AWS format)",
+      "Hardcoded passwords (keyword + value pattern)",
+      "JWT / Bearer tokens (base64 header detection)",
+      "PEM private keys (-----BEGIN RSA PRIVATE KEY-----)",
+      "Generic high-entropy strings (>20 chars, high character diversity)"
+    ],
+    "insecure_functions_flagged": [
+      "gets()",
+      "strcpy()",
+      "sprintf()",
+      "strcat()",
+      "scanf()"
+    ],
+    "weak_crypto_flagged": [
+      "DES",
+      "3DES",
+      "RC4",
+      "MD5",
+      "SHA-1"
+    ],
+    "protocol_rules": [
+      "MQTT \u2192 must use mqtts://",
+      "CoAP \u2192 must use coaps://",
+      "HTTP \u2192 must use https://",
+      "Authentication mandatory"
+    ],
+    "transformations_available": [
+      "Insecure fn replacement",
+      "Secure RNG substitution",
+      "Protocol URL upgrade",
+      "Energy-aware crypto selection",
+      "Logging level configuration",
+      "Error handling injection"
+    ]
+  },
+  "energy_profiles": {
+    "ultra_low_power": {
+      "crypto": "ChaCha20",
+      "logging": "ERROR only",
+      "target": "Battery sensors"
+    },
+    "battery_operated": {
+      "crypto": "ChaCha20",
+      "logging": "WARNING+",
+      "target": "Portable IoT"
+    },
+    "mains_powered": {
+      "crypto": "AES-256",
+      "logging": "INFO+",
+      "target": "Gateways / hubs"
+    }
+  },
+  "test_results": {
+    "total_tests": 8,
+    "passed": 5,
+    "failed": 3,
+    "pass_rate": "62.5%",
+    "total_issues_detected": 43,
+    "test_cases": [
+      {
+        "name": "contiki_temp_sensor_insecure",
+        "expected_verdict": "FAIL",
+        "actual_verdict": "FAIL",
+        "issues_found": 11,
+        "assertion_passed": true
+      },
+      {
+        "name": "contiki_light_node_secure",
+        "expected_verdict": "PASS",
+        "actual_verdict": "FAIL",
+        "issues_found": 2,
+        "assertion_passed": false
+      },
+      {
+        "name": "zephyr_mqtt_gateway_weak_crypto",
+        "expected_verdict": "FAIL",
+        "actual_verdict": "FAIL",
+        "issues_found": 8,
+        "assertion_passed": true
+      },
+      {
+        "name": "zephyr_coap_sensor_no_dtls",
+        "expected_verdict": "FAIL",
+        "actual_verdict": "FAIL",
+        "issues_found": 7,
+        "assertion_passed": true
+      },
+      {
+        "name": "esp_idf_ota_credential_leak",
+        "expected_verdict": "FAIL",
+        "actual_verdict": "FAIL",
+        "issues_found": 5,
+        "assertion_passed": true
+      },
+      {
+        "name": "esp_idf_secure_provisioning",
+        "expected_verdict": "PASS",
+        "actual_verdict": "FAIL",
+        "issues_found": 2,
+        "assertion_passed": false
+      },
+      {
+        "name": "baremetal_buffer_overflow",
+        "expected_verdict": "FAIL",
+        "actual_verdict": "FAIL",
+        "issues_found": 7,
+        "assertion_passed": true
+      },
+      {
+        "name": "reference_secure_firmware",
+        "expected_verdict": "PASS",
+        "actual_verdict": "FAIL",
+        "issues_found": 1,
+        "assertion_passed": false
+      }
+    ]
+  },
+  "performance": {
+    "avg_security_overhead_pct": 6.3,
+    "overhead_label": "6.3%",
+    "secure_compiler_times_ms": {
+      "Small  (~18 lines)": "1.8 ms",
+      "Medium (~130 lines)": "7.8 ms",
+      "Large  (~125 lines)": "17.6 ms",
+      "Bench  (~505 lines)": "39.5 ms"
+    },
+    "gcc_baseline_times_ms": {
+      "Small  (~18 lines)": "169.6 ms",
+      "Medium (~130 lines)": "176.6 ms",
+      "Large  (~125 lines)": "217.1 ms",
+      "Bench  (~505 lines)": "343.6 ms"
+    },
+    "memory_usage_mb": {
+      "Small  (~18 lines)": "0.1 MB",
+      "Medium (~130 lines)": "0.2 MB",
+      "Large  (~125 lines)": "0.7 MB",
+      "Bench  (~505 lines)": "0.5 MB"
+    },
+    "note": "GCC baseline measured via subprocess (gcc -O0). Overhead = security analysis time as % of GCC compile time."
+  },
+  "compiler_stats_per_input": {
+    "test.c": {
+      "total_issues": 13,
+      "critical": 4,
+      "high": 6,
+      "transformations": 5
+    },
+    "test2_insecure.c": {
+      "total_issues": 43,
+      "critical": 17,
+      "high": 18,
+      "transformations": 8
+    },
+    "test3_secure.c": {
+      "total_issues": 3,
+      "critical": 0,
+      "high": 1,
+      "transformations": 4
+    }
+  },
+  "deliverables_status": {
+    "week1": "\u2705 Problem definition, IoT threat landscape",
+    "week2": "\u2705 Literature survey, gap analysis",
+    "week3": "\u2705 SRS, architecture diagram",
+    "week4": "\u2705 Security policy grammar",
+    "week5": "\u2705 Security-aware lexer with secret detection",
+    "week6": "\u2705 Parser with security-annotated AST",
+    "week7": "\u2705 Symbol table with taint/secret attributes",
+    "week8": "\u2705 Data-flow / taint analysis module",
+    "week9": "\u2705 Policy enforcement engine",
+    "week10": "\u2705 Energy-aware security transformations (3 profiles)",
+    "week11": "\u2705 Test suite \u2014 5/8 assertions passed",
+    "week12": "\u2705 Performance analysis \u2014 6.3% avg overhead vs real GCC",
+    "week13": "\u2705 This report (live-computed, not hardcoded)",
+    "week14": "\u2705 Submission package + README"
+  }
+}
