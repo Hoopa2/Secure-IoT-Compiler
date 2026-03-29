@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-03-29T22:27:22.480498",
+  "energy_profile": "battery_operated",
+  "summary": {
+    "total_issues": 12,
+    "by_severity": {
+      "CRITICAL": 4,
+      "HIGH": 6,
+      "MEDIUM": 0,
+      "LOW": 0,
+      "INFO": 2
+    },
+    "transformations_applied": 8
+  },
+  "issues": [
+    {
+      "type": "HARDCODED_SECRET",
+      "description": "Hardcoded password",
+      "line": 10,
+      "match": "PASSWORD = \"admin123\"",
+      "severity": "CRITICAL"
+    },
+    {
+      "type": "INSECURE_FUNCTION",
+      "description": "Use of insecure function: gets()",
+      "line": 27,
+      "suggestion": "Replace with secure alternative",
+      "severity": "HIGH"
+    },
+    {
+      "type": "WEAK_RANDOM",
+      "description": "Weak random number generator: rand()",
+      "line": 17,
+      "suggestion": "Use esp_random(), getrandom(), or RAND_bytes()",
+      "severity": "HIGH"
+    },
+    {
+      "type": "WEAK_RANDOM",
+      "description": "Weak random number generator: random()",
+      "line": 35,
+      "suggestion": "Use esp_random(), getrandom(), or RAND_bytes()",
+      "severity": "HIGH"
+    },
+    {
+      "type": "INSECURE_FUNCTION",
+      "description": "Use of insecure function: gets()",
+      "line": 27,
+      "code_snippet": "gets(buffer);",
+      "suggestion": "Replace gets() with secure alternative (fgets, strncpy, snprintf)",
+      "severity": "HIGH"
+    },
+    {
+      "type": "WEAK_CRYPTO",
+      "description": "Weak cipher algorithm: DES",
+      "line": 20,
+      "code_snippet": "char cipher[] = \"DES\";",
+      "suggestion": "Use AES-256 or ChaCha20-Poly1305 instead",
+      "severity": "CRITICAL"
+    },
+    {
+      "type": "INSECURE_PROTOCOL",
+      "description": "MQTT without TLS - credentials and data sent in plaintext",
+      "line": 14,
+      "code_snippet": "char* broker = \"mqtt://iot.eclipse.org\";",
+      "suggestion": "Use mqtts:// (MQTT over TLS) or add TLS configuration",
+      "severity": "CRITICAL"
+    },
+    {
+      "type": "BUFFER_OVERFLOW",
+      "description": "Fixed-size buffer with unsafe input function",
+      "line": 26,
+      "code_snippet": "char buffer[10]; ... gets(buffer);",
+      "suggestion": "Use fgets with size limit or dynamic allocation",
+      "severity": "HIGH"
+    },
+    {
+      "type": "SECRET_SOURCE",
+      "description": "Potential secret assigned to 'API_KEY'",
+      "line": 7,
+      "code_snippet": "const char* API_KEY = \"sk_live_4eC39HqLyjWDarjtT1zdp7dc\";",
+      "severity": "INFO"
+    },
+    {
+      "type": "SECRET_SOURCE",
+      "description": "Potential secret assigned to 'broker'",
+      "line": 14,
+      "code_snippet": "char* broker = \"mqtt://iot.eclipse.org\";",
+      "severity": "INFO"
+    },
+    {
+      "type": "DATA_LEAK",
+      "description": "Tainted data 'API_KEY' leaked via printf()",
+      "line": 23,
+      "code_snippet": "printf(\"Connecting with API key: %s\\n\", API_KEY);",
+      "severity": "HIGH"
+    },
+    {
+      "type": "POLICY_VIOLATION",
+      "policy": "TLS_REQUIRED",
+      "description": "MQTT connection without TLS encryption",
+      "line": 14,
+      "code_snippet": "char* broker = \"mqtt://iot.eclipse.org\";",
+      "severity": "CRITICAL",
+      "remediation": "Replace mqtt:// with mqtts:// and configure TLS certificates"
+    }
+  ],
+  "transformations": "\n=== TRANSFORMATIONS APPLIED ===\n1. gets -> fgets\n2. Added buffer size tracking\n3. Replaced weak random with secure RNG\n4. Upgraded protocols to secure versions (TLS/DTLS)\n5. Configured logging level: WARNING\n\nEnergy Profile: battery_operated\n"
+}

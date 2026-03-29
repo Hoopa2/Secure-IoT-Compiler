@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-03-29T22:29:15.928972",
+  "summary": {
+    "total_tests": 5,
+    "avg_time_ms": 7.181262969970703,
+    "avg_memory_mb": 0.32734375,
+    "avg_overhead_percent": 239275.43233235675
+  },
+  "results": [
+    {
+      "name": "Tiny (10 lines)",
+      "time_ms": 2.5703907012939453,
+      "baseline_ms": 0.003,
+      "overhead_percent": 85579.6900431315,
+      "memory_mb": 0.05078125,
+      "tokens": 27
+    },
+    {
+      "name": "Small (50 lines)",
+      "time_ms": 1.0666847229003906,
+      "baseline_ms": 0.003,
+      "overhead_percent": 35456.15743001302,
+      "memory_mb": 0.0703125,
+      "tokens": 275
+    },
+    {
+      "name": "Medium (200 lines)",
+      "time_ms": 5.550146102905273,
+      "baseline_ms": 0.003,
+      "overhead_percent": 184904.87009684244,
+      "memory_mb": 0.32421875,
+      "tokens": 1273
+    },
+    {
+      "name": "Large (500 lines)",
+      "time_ms": 10.059833526611328,
+      "baseline_ms": 0.003,
+      "overhead_percent": 335227.78422037757,
+      "memory_mb": 0.67578125,
+      "tokens": 3250
+    },
+    {
+      "name": "X-Large (1000 lines)",
+      "time_ms": 16.659259796142578,
+      "baseline_ms": 0.003,
+      "overhead_percent": 555208.6598714192,
+      "memory_mb": 0.515625,
+      "tokens": 5500
+    }
+  ]
+}
